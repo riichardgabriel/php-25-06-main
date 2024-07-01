@@ -1,0 +1,31 @@
+try {
+    
+    // Tenta executar o código dentro desse bloco
+    $user = $_POST['usuario'];   // Recebe o valor do campo 'usuario' enviado método POST
+    
+    $password = $_POST['senha']; // Recebe o valor do campo 'senha' enviado método POST
+
+    // Estabelece uma conexão com o banco de dados MySQL usando PDO
+    $conn = new PDO("mysql:host=localhost;dbname=login","root","");
+    
+    // Define um script SQL para inserir dados na tabela 'tb_usuario'
+    $script = 'INSERT INTO tb_usuario (usuario, senha) VALUE (:usuario, :senha)';
+    
+
+    // Prepara a query SQL para execução, evitando SQL injection usando parâmetros nomeados
+    $pre = $conn->prepare($script);
+    
+    // Define um array associado com os valores a serem inseridos na query
+    $var = [
+        ':usuario' => $user,      // Associa o valor recebido para o parâmetro ':usuario'
+        ':senha' => $password     // Associa o valor recebido para o parâmetro ':senha'
+    ];
+    
+    // Executa a query preparada, passando o array de valores como parâmetro
+    $pre->execute($var);
+
+} catch (PDOException $erro){
+
+    // Captura qualquer exceção lançada pelo bloco 'try' relacionada ao PDO
+    echo "Seguinte deu pau no sistema" .$erro->getMessage(); // Imprime uma mensagem de erro junto com a descrição da exceção
+}
